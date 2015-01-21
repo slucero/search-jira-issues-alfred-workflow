@@ -16,7 +16,7 @@ $ brew install curl jsawk
 ```
 
 ## Installation
-Download the latest release and open the `search.jira-issues.alfredworkflow` file to install it on your machine.
+Download the [latest release](https://github.com/swissmanu/search-jira-issues-alfred-workflow/releases/latest) and open the `search.jira-issues.alfredworkflow` file to install it automatically to Alfred.
 
 ## Configuration
 You have to create your own `config.json` file before you can use the new workflow:
