@@ -16,7 +16,7 @@ if [ -z "$query" ]; then
 else
 	queryJql=`echo $config | jsawk -n 'out(this.searchJql)'`
 fi
-queryJql=`echo $queryJql | sed s/{query}/$query/g`
+queryJql=`echo $queryJql | sed "s/{query}/$query/g"`
 
 # Call API & Generate XML Items for Alfred:
 xmlItems=`curl -s -u $user:$password -G -H "Content-Type: application/json" --data-urlencode "jql=$queryJql" --data-urlencode "maxResults=$maxResults" --data "validateQuery=false" --data "fields=$fields" "$host/rest/api/2/search" \
