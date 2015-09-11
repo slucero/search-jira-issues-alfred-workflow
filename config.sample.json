@@ -1,9 +1,9 @@
 {
-	"user": "username",
-	"password": "password",
-	"jiraUrl": "https://myjirahost.com",
-
-	"maxResults": 20,
-	"emptySearchJql": "project='XYZ' AND status != closed ORDER BY lastViewed",
-	"searchJql": "project='XYZ' AND (text~'{query}' OR id='{query}') AND status != closed ORDER BY lastViewed"
+  "user": "username",
+  "password": "password",
+  "jiraUrl": "https://myjirahost.com",
+  "maxResults": 20,
+  "emptySearchJql": "project='XYZ' AND status != closed ORDER BY lastViewed",
+  "searchJql": "project='XYZ' AND (text~'{query}' OR id='{query}') AND status != closed ORDER BY lastViewed",
+  "convertImages": false
 }

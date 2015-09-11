@@ -1,26 +1,28 @@
 #!/bin/sh
 
 # Get Alfreds query parameter from CLI arguments:
+
 query=$1
 
 # Read config.json & prepare:
-config=`cat ./config.json`
-user=`echo $config | jsawk -n 'out(this.user)'`
-password=`echo $config | jsawk -n 'out(this.password)'`
-host=`echo $config | jsawk -n 'out(this.jiraUrl)'`
-maxResults=`echo $config | jsawk -n 'out(this.maxResults)'`
+
+config=`cat ./config.json | jq -r .`
+user=`jq -r -M .user <<< $config`
+password=`jq -r -M .password <<< $config`
+host=`jq -r -M .jiraUrl <<< $config`
+maxResults=`jq -r -M .maxResults <<< $config`
 fields="id,key,project,issuetype,summary"
 
 if [ -z "$query" ]; then
-	queryJql=`echo $config | jsawk -n 'out(this.emptySearchJql)'`
+  queryJql=`jq -r -M .emptySearchJql <<< $config`
 else
-	queryJql=`echo $config | jsawk -n 'out(this.searchJql)'`
+  queryJql=`jq -r -M .searchJql <<< $config`
 fi
 queryJql=`echo $queryJql | sed "s/{query}/$query/g"`
 
 # Call API & Generate XML Items for Alfred:
-xmlItems=`curl -s -u $user:$password -G -H "Content-Type: application/json" --data-urlencode "jql=$queryJql" --data-urlencode "maxResults=$maxResults" --data "validateQuery=false" --data "fields=$fields" "$host/rest/api/2/search" \
-	| jsawk 'return this.issues' \
-	| jsawk -n 'out("<item uid=\"" + this.key + "\" valid=\"yes\" arg=\"'$host'/browse/" + this.key + "\"><title><![CDATA[" + this.fields.summary + "]]></title><subtitle><![CDATA[" + this.key + " (" + this.fields.issuetype.name + ", " + this.fields.project.name + ")]]></subtitle><icon>icons/" + this.fields.issuetype.iconUrl.substr(this.fields.issuetype.iconUrl.lastIndexOf("/")+1) + "</icon></item>")'`
+
+response=`curl -s -u $user:$password -G -H "Content-Type: application/json" --data-urlencode "jql=$queryJql" --data-urlencode "maxResults=$maxResults" --data "validateQuery=false" --data "fields=$fields" "$host/rest/api/2/search"`
+xmlItems=`./buildXMLItems.sh "${response}"`
 
 echo "<?xml version=\"1.0\"?><items>$xmlItems</items>"

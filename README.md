@@ -6,17 +6,18 @@ This workflow for Alfred 2 allows you to search issues on an Atlassian Jira inst
 
 ## Dependencies
 
-* `jsawk`
+* [`jq`](https://stedolan.github.io/jq/)
 * `curl`
+* ImageMagick (optional, see settings)
 
 The easiest way to install the dependencies is [`brew`](http://brew.sh/):
 
 ```bash
-$ brew install curl jsawk
+$ brew install curl jq
 ```
 
 ## Installation
-Download the [latest release](https://github.com/swissmanu/search-jira-issues-alfred-workflow/releases/latest) and open the `search.jira-issues.alfredworkflow` file to install it automatically to Alfred.
+Download the [latest release](https://github.com/swissmanu/search-jira-issues-alfred-workflow/releases) and open the `search.jira-issues.alfredworkflow` file to install it automatically to Alfred.
 
 ## Configuration
 You have to create your own `config.json` file before you can use the new workflow:
@@ -38,6 +39,7 @@ You have to create your own `config.json` file before you can use the new workfl
 | `maxResults` | Limit the number of issues to display. | `20` |
 | `emptySearchJql` | This JQL query is executed if you don't enter any search term after the workflows keyword. See [Atlassians JQL documentation](https://confluence.atlassian.com/display/JIRA/Advanced+Searching) for available query options. | `project = 'FOO' ORDER BY lastViewed` |
 | `searchJql` | This JQL query is executed if you enter a search term after the workflows keyword. Use `{query}` to pass the entered search term to JIRA's API. See [Atlassians JQL documentation](https://confluence.atlassian.com/display/JIRA/Advanced+Searching) for available query options. | `project = 'FOO' summary~'{query}' ORDER BY lastViewed` |
+| `convertImages` | Sometimes project icons are SVG images that can not be displayed in Alfred. Set this to true and make sure ImageMagick's `convert` is in your path. | `"convertImages": true` |
 
 ## Usage
 Open your Alfred prompt and start typing `jira`. The workflow will call JIRA's API with the given `emptySearchJql` JQL query if you enter no specific search term.
